@@ -36,7 +36,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse loginResponse = authService.login(request);
-        // Return 200 OK with login response (no Location, no new resource created)
         return ResponseEntity.ok(loginResponse);
     }
 }
