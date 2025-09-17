@@ -13,12 +13,14 @@ import lombok.*;
 public class User {
 
     @Id
+    @Column(columnDefinition = "uuid", updatable = false)
     @GeneratedValue
     private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
     private String username;
 
     private String password;

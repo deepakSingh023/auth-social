@@ -1,6 +1,5 @@
 package com.example.auth_social.services;
 
-
 import com.example.auth_social.dto.*;
 import com.example.auth_social.entity.User;
 import com.example.auth_social.repository.UserRepository;
@@ -10,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-@RequiredArgsConstructor // constructor injection for final fields
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
@@ -25,12 +26,16 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email already registered");
         }
 
+        // check if username already exists
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username already taken");
+        }
 
         // create new user entity
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())) // hash password
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role("USER")
                 .provider("LOCAL")
                 .build();
@@ -38,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         // save user in DB
         User savedUser = userRepository.save(user);
 
-        // return UserResponse (not entity)
+        // return UserResponse
         return UserResponse.builder()
                 .id(savedUser.getId())
                 .username(savedUser.getUsername())
@@ -58,11 +63,13 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // generate tokens
-        String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
+        UUID userId = user.getId(); // UUID type
 
-        // return LoginResponse (not entity)
+        // generate tokens using UUID
+        String accessToken = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(userId);
+
+        // return LoginResponse
         return LoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
