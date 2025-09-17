@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // apply CORS config
                 .authorizeHttpRequests(auth -> auth
                         // allow public auth endpoints
-                        .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/signup", "/api/auth/login","/api/health").permitAll()
                         // allow OPTIONS preflight across the board
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // protect everything else
