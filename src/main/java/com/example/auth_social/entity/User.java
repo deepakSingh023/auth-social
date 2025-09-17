@@ -1,4 +1,5 @@
 package com.example.auth_social.entity;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,8 +13,8 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    private Long id;
+    @GeneratedValue
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
