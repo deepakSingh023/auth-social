@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String SECRET = "superSecretKey"; // should come from application.yml
+    private final String SECRET = "mySuperLongSecureRandomJwtSecretKey1234567890"; // should come from application.yml
     private final long EXPIRATION_TIME = 1000 * 60 * 15; // 15 min
     private final long REFRESH_EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 7; // 7 days
 

@@ -19,7 +19,7 @@ public class AuthController {
     public ResponseEntity<UserResponse> signup(@RequestBody SignUpRequest request) {
         UserResponse createdUser = authService.signup(request);
 
-        // Build the URI for the new resource (e.g., /api/auth/users/{id})
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest() // current URL = /api/auth/signup
                 .path("/{id}")        // append /{id}

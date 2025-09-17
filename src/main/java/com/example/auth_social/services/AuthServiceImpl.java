@@ -25,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email already registered");
         }
 
+
         // create new user entity
         User user = User.builder()
                 .username(request.getUsername())
