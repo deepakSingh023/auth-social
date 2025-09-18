@@ -1,5 +1,5 @@
 package com.example.auth_social.config;
-
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,17 +42,16 @@ public class SecurityConfig {
     }
 
     // ✅ Security filter chain
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // disable CSRF for APIs
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // apply CORS config
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stateless session
                 .authorizeHttpRequests(auth -> auth
-                        // allow public auth endpoints
                         .requestMatchers("/api/auth/signup", "/api/auth/login","/api/health").permitAll()
-                        // allow OPTIONS preflight across the board
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // protect everything else
                         .anyRequest().authenticated()
                 );
 
