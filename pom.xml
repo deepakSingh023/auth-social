@@ -49,7 +49,6 @@
             <scope>runtime</scope>
         </dependency>
 
-
         <!-- Spring Security OAuth2 Client (for Google Login) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
