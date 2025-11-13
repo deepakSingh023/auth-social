@@ -1,14 +1,15 @@
 package com.example.auth_social.services;
 
+import com.example.auth_social.client.ProfileClient;
 import com.example.auth_social.dto.*;
 import com.example.auth_social.entity.User;
 import com.example.auth_social.repository.UserRepository;
-import com.example.auth_social.services.AuthService;
 import com.example.auth_social.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -18,6 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final ProfileClient profileClient; // 👈 Feign client injected
 
     @Override
     public UserResponse signup(SignUpRequest request) {
@@ -42,6 +44,18 @@ public class AuthServiceImpl implements AuthService {
 
         // save user in DB
         User savedUser = userRepository.save(user);
+
+        // create profile in Profile Service via Feign
+        try {
+            profileClient.createProfile(Map.of(
+                    "userId", savedUser.getId(),
+                    "username", savedUser.getUsername(),
+                    "email", savedUser.getEmail()
+            ));
+        } catch (Exception e) {
+            System.err.println("⚠️ Failed to create profile for userId " + savedUser.getId() + ": " + e.getMessage());
+            // optionally log with logger instead of System.err in production
+        }
 
         // return UserResponse
         return UserResponse.builder()
@@ -69,7 +83,6 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
         String refreshToken = jwtUtil.generateRefreshToken(userId);
 
-        // return LoginResponse
         return LoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -78,3 +91,4 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 }
+
