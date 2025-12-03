@@ -7,10 +7,10 @@ import java.util.Map;
 
 @FeignClient(
         name = "profile-service",
-        url = "${profile.service.url}" // configurable in application.yml
+        url = "${profile.service.url}"
 )
 public interface ProfileClient {
 
-    @PostMapping("/api/profiles")
+    @PostMapping("/api/profiles/create-profile")
     void createProfile(@RequestBody Map<String, Object> request);
 }
