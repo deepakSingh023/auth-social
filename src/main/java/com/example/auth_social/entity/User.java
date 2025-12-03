@@ -17,10 +17,10 @@ public class User {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     private String password;
