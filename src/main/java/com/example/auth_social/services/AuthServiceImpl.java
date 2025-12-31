@@ -1,6 +1,5 @@
 package com.example.auth_social.services;
 
-import com.example.auth_social.client.ProfileClient;
 import com.example.auth_social.dto.*;
 import com.example.auth_social.entity.User;
 import com.example.auth_social.repository.UserRepository;
@@ -19,7 +18,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final ProfileClient profileClient; // 👈 Feign client injected
+
 
     @Override
     public UserResponse signup(SignUpRequest request) {
@@ -46,16 +45,7 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
 
         // create profile in Profile Service via Feign
-        try {
-            profileClient.createProfile(Map.of(
-                    "userId", savedUser.getId(),
-                    "username", savedUser.getUsername(),
-                    "email", savedUser.getEmail()
-            ));
-        } catch (Exception e) {
-            System.err.println("⚠️ Failed to create profile for userId " + savedUser.getId() + ": " + e.getMessage());
-            // optionally log with logger instead of System.err in production
-        }
+
 
         // return UserResponse
         return UserResponse.builder()
