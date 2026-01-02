@@ -70,11 +70,11 @@ public class AuthServiceImpl implements AuthService {
         UUID userId = user.getId(); // UUID type
 
         // generate tokens using UUID
-        String accessToken = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
+        String token = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
         String refreshToken = jwtUtil.generateRefreshToken(userId);
 
         return LoginResponse.builder()
-                .accessToken(accessToken)
+                .token(token)
                 .refreshToken(refreshToken)
                 .userId(user.getId())
                 .email(user.getEmail())

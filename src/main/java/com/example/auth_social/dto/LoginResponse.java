@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public class LoginResponse {
     private UUID  userId;
-    private String accessToken;
+    private String token;
     private String refreshToken;
     private String email;
     private String role;
