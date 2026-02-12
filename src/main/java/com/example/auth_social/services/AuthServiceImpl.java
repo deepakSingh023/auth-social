@@ -2,6 +2,10 @@ package com.example.auth_social.services;
 
 import com.example.auth_social.dto.*;
 import com.example.auth_social.entity.User;
+import com.example.auth_social.exception.EmailAlreadyInUse;
+import com.example.auth_social.exception.InvalidCredentials;
+import com.example.auth_social.exception.UserNotFound;
+import com.example.auth_social.exception.UsernameAlreadyInUse;
 import com.example.auth_social.repository.UserRepository;
 import com.example.auth_social.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +28,12 @@ public class AuthServiceImpl implements AuthService {
     public UserResponse signup(SignUpRequest request) {
         // check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already registered");
+            throw new EmailAlreadyInUse("Email already registered");
         }
 
         // check if username already exists
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already taken");
+            throw new UsernameAlreadyInUse("Username already taken");
         }
 
         // create new user entity
@@ -43,8 +47,6 @@ public class AuthServiceImpl implements AuthService {
 
         // save user in DB
         User savedUser = userRepository.save(user);
-
-        // create profile in Profile Service via Feign
 
 
         // return UserResponse
@@ -60,11 +62,12 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponse login(LoginRequest request) {
         // find user by email
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFound(
+                        "User not found"));
 
         // check password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentials("Invalid credentials");
         }
 
         UUID userId = user.getId(); // UUID type
