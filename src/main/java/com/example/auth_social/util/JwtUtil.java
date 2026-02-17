@@ -18,8 +18,7 @@ public class JwtUtil {
     @Value("${JWT_SECRET}")
     private String SECRET;
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 15; // 15 minutes
-    private final long REFRESH_EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 7; // 7 days
+    private final long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 7;  // 7 days
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
@@ -36,13 +35,5 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Generate refresh token with UUID as subject
-    public String generateRefreshToken(UUID userId) {
-        return Jwts.builder()
-                .setSubject(userId.toString())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
-                .compact();
-    }
+
 }

@@ -70,11 +70,9 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentials("Invalid credentials");
         }
 
-        UUID userId = user.getId(); // UUID type
+        UUID userId = user.getId();
 
-        // generate tokens using UUID
         String token = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
-        String refreshToken = jwtUtil.generateRefreshToken(userId);
 
         return LoginResponse.builder()
                 .token(token)
