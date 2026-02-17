@@ -11,7 +11,7 @@ import java.util.UUID;
 public class LoginResponse {
     private UUID  userId;
     private String token;
-    private String refreshToken;
+    private String  username;
     private String email;
     private String role;
 }
