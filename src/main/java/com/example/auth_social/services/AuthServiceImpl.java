@@ -77,8 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
         CreateProfile data = new CreateProfile(
                 user.getUsername(),
-                user.getEmail(),
-                userId.toString()
+                user.getEmail()
         );
 
         feignClient.createProfile(data,token);

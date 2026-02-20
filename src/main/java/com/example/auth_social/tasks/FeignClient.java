@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface FeignClient {
 
 
-    @PostMapping("/profile/create")
+    @PostMapping("/profiles/create")
     void createProfile(
             @RequestBody CreateProfile data,
             @RequestHeader("Authorization") String token);

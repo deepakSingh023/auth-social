@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableFeignClients
 @SpringBootApplication
-@EnableScheduling              // Enables scheduled tasks (like KeepAliveTask)
+@EnableScheduling
 public class AuthSocialApplication {
 
     public static void main(String[] args) {
