@@ -50,6 +50,14 @@ public class AuthServiceImpl implements AuthService {
         // save user in DB
         User savedUser = userRepository.save(user);
 
+        CreateProfile data = new CreateProfile(
+                user.getUsername(),
+                user.getEmail(),
+                user.getId().toString()
+        );
+
+        feignClient.createProfile(data);
+
         // return UserResponse
         return UserResponse.builder()
                 .id(savedUser.getId())
@@ -75,12 +83,9 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
 
-        CreateProfile data = new CreateProfile(
-                user.getUsername(),
-                user.getEmail()
-        );
 
-        feignClient.createProfile(data, "Bearer " + token);
+
+
 
         return LoginResponse.builder()
                 .token(token)

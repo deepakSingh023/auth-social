@@ -14,8 +14,8 @@ public interface FeignClient {
 
     @PostMapping("/profiles/create")
     void createProfile(
-            @RequestBody CreateProfile data,
-            @RequestHeader("Authorization") String token);
+            @RequestBody CreateProfile data
+    );
 
 }
 
