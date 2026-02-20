@@ -7,6 +7,7 @@ import com.example.auth_social.exception.InvalidCredentials;
 import com.example.auth_social.exception.UserNotFound;
 import com.example.auth_social.exception.UsernameAlreadyInUse;
 import com.example.auth_social.repository.UserRepository;
+import com.example.auth_social.tasks.FeignClient;
 import com.example.auth_social.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final FeignClient feignClient;
 
 
     @Override
@@ -48,7 +50,6 @@ public class AuthServiceImpl implements AuthService {
         // save user in DB
         User savedUser = userRepository.save(user);
 
-
         // return UserResponse
         return UserResponse.builder()
                 .id(savedUser.getId())
@@ -73,6 +74,14 @@ public class AuthServiceImpl implements AuthService {
         UUID userId = user.getId();
 
         String token = jwtUtil.generateToken(userId, user.getRole(), user.getEmail());
+
+        CreateProfile data = new CreateProfile(
+                user.getUsername(),
+                user.getEmail(),
+                userId.toString()
+        );
+
+        feignClient.createProfile(data,token);
 
         return LoginResponse.builder()
                 .token(token)
