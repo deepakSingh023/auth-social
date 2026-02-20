@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
                 user.getEmail()
         );
 
-        feignClient.createProfile(data,token);
+        feignClient.createProfile(data, "Bearer " + token);
 
         return LoginResponse.builder()
                 .token(token)
