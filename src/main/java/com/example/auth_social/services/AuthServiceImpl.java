@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Value("${service.secret}")
-    private final String secret;
+    private String secret;
 
 
     @Override
