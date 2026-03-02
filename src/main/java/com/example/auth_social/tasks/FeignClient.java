@@ -14,7 +14,8 @@ public interface FeignClient {
 
     @PostMapping("/profiles/create")
     void createProfile(
-            @RequestBody CreateProfile data
+            @RequestBody CreateProfile data,
+            @RequestHeader("X-SECRET-TOKEN") String token
     );
 
 }

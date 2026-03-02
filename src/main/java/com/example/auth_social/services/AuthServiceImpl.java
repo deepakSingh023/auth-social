@@ -10,6 +10,7 @@ import com.example.auth_social.repository.UserRepository;
 import com.example.auth_social.tasks.FeignClient;
 import com.example.auth_social.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final FeignClient feignClient;
+
+
+    @Value("${service.secret}")
+    private final String secret;
 
 
     @Override
@@ -56,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
                 user.getId().toString()
         );
 
-        feignClient.createProfile(data);
+        feignClient.createProfile(data,secret);
 
         // return UserResponse
         return UserResponse.builder()
