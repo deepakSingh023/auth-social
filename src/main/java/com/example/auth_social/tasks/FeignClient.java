@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface FeignClient {
 
 
-    @PostMapping("/profiles/create")
+    @PostMapping("/api/profiles/create")
     void createProfile(
             @RequestBody CreateProfile data,
             @RequestHeader("X-SECRET-TOKEN") String token
