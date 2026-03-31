@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@org.springframework.cloud.openfeign.FeignClient(name="profile-creation" ,url="${PROFILE_SERVICE}")
+@org.springframework.cloud.openfeign.FeignClient(name="profile-creation" ,url="${profile.service.url}")
 public interface FeignClient {
 
 

@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final FeignClient feignClient;
+    private final AsyncService asyncService;
 
 
     @Value("${service.secret}")
@@ -56,12 +56,12 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
 
         CreateProfile data = new CreateProfile(
-                user.getUsername(),
-                user.getEmail(),
-                user.getId().toString()
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getId().toString()
         );
 
-        feignClient.createProfile(data,secret);
+        asyncService.createProfiles(data,secret);
 
         // return UserResponse
         return UserResponse.builder()

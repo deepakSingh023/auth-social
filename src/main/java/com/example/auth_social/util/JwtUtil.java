@@ -15,7 +15,7 @@ import java.util.UUID;
 public class JwtUtil {
 
     // Read JWT secret from environment variable
-    @Value("${JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String SECRET;
 
     private final long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 7;  // 7 days
