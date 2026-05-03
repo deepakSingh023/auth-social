@@ -18,6 +18,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByUsername(String username);
 
-    @Query("SELECT u.id FROM User u WHERE u.id IN :ids")
-    List<UUID> findExistingIds(List<UUID> userIds);
 }
